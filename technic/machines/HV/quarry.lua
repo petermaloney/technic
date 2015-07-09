@@ -150,8 +150,14 @@ local function quarry_run(pos, node)
 			if can_dig then
 				dignode = technic.get_or_load_node(digpos) or minetest.get_node(digpos)
 				local dignodedef = minetest.registered_nodes[dignode.name] or {diggable=false}
-				if not dignodedef.diggable or (dignodedef.can_dig and not dignodedef.can_dig(digpos, nil)) then
+				if dignode.name == "bones:bones" then
+					-- digging bones crashes the server
 					can_dig = false
+				end
+				if can_dig then
+					if not dignodedef.diggable or (dignodedef.can_dig and not dignodedef.can_dig(digpos, nil)) then
+						can_dig = false
+					end
 				end
 			end
 
